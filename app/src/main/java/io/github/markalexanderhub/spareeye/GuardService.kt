@@ -7,6 +7,13 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.content.pm.ServiceInfo
+import android.hardware.camera2.CameraCharacteristics
+import android.hardware.camera2.CaptureRequest
+import android.util.Log
+import android.util.Range
+import androidx.camera.camera2.interop.Camera2CameraInfo
+import androidx.camera.camera2.interop.Camera2Interop
+import androidx.camera.camera2.interop.ExperimentalCamera2Interop
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Matrix
@@ -47,6 +54,7 @@ import java.util.concurrent.atomic.AtomicBoolean
 class GuardService : LifecycleService() {
 
     companion object {
+        private const val TAG = "SpareEye"
         private const val CHANNEL = "watching"
         private const val NOTIFICATION_ID = 1
         const val ACTION_STOP = "io.github.markalexanderhub.spareeye.STOP"
@@ -127,12 +135,29 @@ class GuardService : LifecycleService() {
         }, ContextCompat.getMainExecutor(this))
     }
 
+    /** The slowest frame-rate range the camera offers (upper bound first, then lower). Fewer frames = cooler phone. */
+    @androidx.annotation.OptIn(ExperimentalCamera2Interop::class)
+    private fun slowestFpsRange(p: ProcessCameraProvider, selector: CameraSelector): Range<Int>? {
+        return try {
+            val info = selector.filter(p.availableCameraInfos).firstOrNull() ?: return null
+            val ranges = Camera2CameraInfo.from(info).getCameraCharacteristic(CameraCharacteristics.CONTROL_AE_AVAILABLE_TARGET_FPS_RANGES) ?: return null
+            Log.i(TAG, "AE fps ranges: " + ranges.joinToString())
+            ranges.filter { it.upper >= 5 }.minWithOrNull(compareBy({ it.upper }, { it.lower }))
+        } catch (e: Exception) { null }
+    }
+
+    @androidx.annotation.OptIn(ExperimentalCamera2Interop::class)
     private fun bind() {
         val p = provider ?: return
         val selector = if (prefs.useFrontCamera) CameraSelector.DEFAULT_FRONT_CAMERA else CameraSelector.DEFAULT_BACK_CAMERA
         detector = MotionDetector(prefs.sensitivity)
 
-        val analysis = ImageAnalysis.Builder()
+        val analysisBuilder = ImageAnalysis.Builder()
+        slowestFpsRange(p, selector)?.let { range ->
+            Log.i(TAG, "Asking for fps range $range")
+            Camera2Interop.Extender(analysisBuilder).setCaptureRequestOption(CaptureRequest.CONTROL_AE_TARGET_FPS_RANGE, range)
+        }
+        val analysis = analysisBuilder
             .setResolutionSelector(
                 ResolutionSelector.Builder()
                     .setResolutionStrategy(ResolutionStrategy(Size(320, 240), ResolutionStrategy.FALLBACK_RULE_CLOSEST_HIGHER_THEN_LOWER))
