@@ -42,6 +42,8 @@ kotlin {
 }
 
 dependencies {
+    // Newer versions of these (core 1.19, material 1.14, CameraX 1.6, OkHttp 5.5 as of Oct 2026)
+    // need compileSdk 37 and Android Gradle plugin 9.1. Bump them together when the toolchain moves.
     implementation("androidx.core:core-ktx:1.15.0")
     implementation("androidx.appcompat:appcompat:1.7.0")
     implementation("androidx.activity:activity-ktx:1.9.3")

@@ -18,11 +18,16 @@ class MjpegServer(
     port: Int,
     private val key: String,
     private val latestFrame: () -> ByteArray?,
+    private val latestFrameAt: () -> Long,
     private val rotationDegrees: () -> Int,
     private val roomName: () -> String,
 ) : NanoHTTPD(port) {
 
     val watchers = AtomicInteger(0)
+
+    /** Frames are only encoded while somebody wants them: a stream watcher, or a page/snap request a moment ago. */
+    @Volatile private var frameWantedUntil = 0L
+    fun wantsFrames(now: Long): Boolean = watchers.get() > 0 || now < frameWantedUntil
 
     override fun serve(session: IHTTPSession): Response {
         val uri = session.uri ?: "/"
@@ -30,12 +35,22 @@ class MjpegServer(
         if (!uri.startsWith(prefix)) {
             return newFixedLengthResponse(Response.Status.NOT_FOUND, MIME_PLAINTEXT, "Not found.")
         }
+        val now = android.os.SystemClock.elapsedRealtime()
         return when (uri.removePrefix(prefix).trimEnd('/')) {
-            "" -> newFixedLengthResponse(Response.Status.OK, "text/html; charset=utf-8", page(prefix)).noCache()
+            "" -> {
+                frameWantedUntil = now + 5000
+                newFixedLengthResponse(Response.Status.OK, "text/html; charset=utf-8", page(prefix)).noCache()
+            }
             "/snap.jpg" -> {
-                val f = latestFrame()
-                if (f == null) newFixedLengthResponse(Response.Status.NO_CONTENT, MIME_PLAINTEXT, "")
-                else newFixedLengthResponse(Response.Status.OK, "image/jpeg", ByteArrayInputStream(f), f.size.toLong()).noCache()
+                frameWantedUntil = now + 4000
+                var f: ByteArray? = null
+                repeat(25) {
+                    if (latestFrameAt() >= now && latestFrame() != null) { f = latestFrame(); return@repeat }
+                    Thread.sleep(100)
+                }
+                val frame = f ?: latestFrame()
+                if (frame == null) newFixedLengthResponse(Response.Status.NO_CONTENT, MIME_PLAINTEXT, "")
+                else newFixedLengthResponse(Response.Status.OK, "image/jpeg", ByteArrayInputStream(frame), frame.size.toLong()).noCache()
             }
             "/stream" -> newChunkedResponse(Response.Status.OK, "multipart/x-mixed-replace; boundary=frame", FrameStream()).noCache()
             else -> newFixedLengthResponse(Response.Status.NOT_FOUND, MIME_PLAINTEXT, "Not found.")

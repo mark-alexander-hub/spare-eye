@@ -71,7 +71,9 @@ class GuardService : LifecycleService() {
     private var wakeLock: PowerManager.WakeLock? = null
 
     @Volatile private var latestJpeg: ByteArray? = null
+    @Volatile private var latestJpegAt = 0L
     @Volatile private var rotation = 0
+    private var lastAnalysed = 0L
     private var lastStreamFrame = 0L
     private var lastLevelPush = 0L
     private var lastAlert = -1L
@@ -163,8 +165,11 @@ class GuardService : LifecycleService() {
     }
 
     private fun analyse(image: ImageProxy) {
-        rotation = image.imageInfo.rotationDegrees
         val now = SystemClock.elapsedRealtime()
+        // Ten frames a second is plenty to notice a person; the rest are dropped unread to save the battery.
+        if (now - lastAnalysed < 100) return
+        lastAnalysed = now
+        rotation = image.imageInfo.rotationDegrees
         val d = detector ?: return
         val plane = image.planes[0]
         val level = d.feed(plane.buffer, image.width, image.height, plane.rowStride, plane.pixelStride)
@@ -174,10 +179,11 @@ class GuardService : LifecycleService() {
             GuardState.update { it.copy(motionLevel = level) }
         }
 
-        val someoneWatching = (server?.watchers?.get() ?: 0) > 0
+        val someoneWatching = server?.wantsFrames(now) == true
         if (someoneWatching && now - lastStreamFrame > 300) {
             lastStreamFrame = now
             latestJpeg = nv21ToJpeg(image.toNv21(), image.width, image.height, 55)
+            latestJpegAt = now
         }
 
         if (now < ignoreUntil) return
@@ -251,7 +257,7 @@ class GuardService : LifecycleService() {
     private fun startLiveView() {
         if (!prefs.liveView) return
         try {
-            val s = MjpegServer(LIVE_PORT, prefs.liveKey, { latestJpeg }, { rotation }, { prefs.room })
+            val s = MjpegServer(LIVE_PORT, prefs.liveKey, { latestJpeg }, { latestJpegAt }, { rotation }, { prefs.room })
             s.start(5000, true)
             server = s
             val ip = wifiAddress()
