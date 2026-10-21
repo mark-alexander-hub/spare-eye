@@ -40,6 +40,14 @@ With "Live view on my Wi-Fi" on, the armed screen shows a link like
 `http://192.168.1.23:8080/k7m2xq4p/`. It works only for devices on the same Wi-Fi, and the
 random part of the link means nobody can simply guess it. Nothing is forwarded to the internet.
 
+## Old phones run a little warm
+
+Phones from before about 2018 often have an older camera driver (Camera "legacy" level), and
+Android has to copy every frame through the graphics chip inside the app. Spare Eye asks the
+camera for its slowest frame rate, which roughly halves that cost, but the phone will still use
+about half a CPU core while armed. Keep it plugged in, which you'd do anyway, and it's fine.
+Newer phones don't have this overhead.
+
 ## Privacy
 
 - The bot token and chat id stay in the app's private storage on the phone.
