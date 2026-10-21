@@ -1,8 +1,18 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import java.util.Properties
 
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+}
+
+// Release signing: a keystore.properties OUTSIDE the repo, found via SPARE_EYE_KEYSTORE_PROPS
+// or %LOCALAPPDATA%\spare-eye-keys\keystore.properties. Without it the release build is unsigned.
+val keystoreProps = Properties().apply {
+    listOfNotNull(
+        System.getenv("SPARE_EYE_KEYSTORE_PROPS"),
+        System.getenv("LOCALAPPDATA")?.let { "$it/spare-eye-keys/keystore.properties" }
+    ).map { file(it) }.firstOrNull { it.exists() }?.inputStream()?.use { load(it) }
 }
 
 android {
@@ -17,11 +27,23 @@ android {
         versionName = "0.1.0"
     }
 
+    signingConfigs {
+        if (keystoreProps.isNotEmpty()) {
+            create("release") {
+                storeFile = file(keystoreProps.getProperty("storeFile"))
+                storePassword = keystoreProps.getProperty("storePassword")
+                keyAlias = keystoreProps.getProperty("keyAlias")
+                keyPassword = keystoreProps.getProperty("keyPassword")
+            }
+        }
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = true
             isShrinkResources = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            signingConfig = signingConfigs.findByName("release")
         }
     }
 
