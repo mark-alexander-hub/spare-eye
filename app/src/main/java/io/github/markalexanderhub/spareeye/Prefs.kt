@@ -59,4 +59,33 @@ class Prefs(context: Context) {
         }
 
     val telegramReady: Boolean get() = botToken.isNotEmpty() && chatId != 0L
+
+    /** [METHOD_NTFY] (default, no account) or [METHOD_TELEGRAM]. */
+    var alertMethod: String
+        get() = sp.getString("method", METHOD_NTFY) ?: METHOD_NTFY
+        set(v) = sp.edit().putString("method", v).apply()
+
+    var ntfyServer: String
+        get() = (sp.getString("ntfy_server", "") ?: "").ifBlank { DEFAULT_NTFY_SERVER }
+        set(v) = sp.edit().putString("ntfy_server", v.trim()).apply()
+
+    /** Long random topic: on ntfy anyone who knows the topic can read it, so it must not be guessable. */
+    val ntfyTopic: String
+        get() {
+            val existing = sp.getString("ntfy_topic", null)
+            if (!existing.isNullOrEmpty()) return existing
+            val alphabet = "abcdefghjkmnpqrstuvwxyz23456789"
+            val rnd = SecureRandom()
+            val topic = "spareeye-" + (1..18).map { alphabet[rnd.nextInt(alphabet.length)] }.joinToString("")
+            sp.edit().putString("ntfy_topic", topic).apply()
+            return topic
+        }
+
+    val alertsReady: Boolean get() = if (alertMethod == METHOD_NTFY) true else telegramReady
+
+    companion object {
+        const val METHOD_NTFY = "ntfy"
+        const val METHOD_TELEGRAM = "telegram"
+        const val DEFAULT_NTFY_SERVER = "https://ntfy.sh"
+    }
 }

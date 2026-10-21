@@ -256,14 +256,18 @@ class GuardService : LifecycleService() {
     }
 
     private fun deliver(jpeg: ByteArray, test: Boolean) {
-        if (!prefs.telegramReady) {
-            GuardState.update { it.copy(lastError = getString(R.string.err_no_telegram)) }
+        if (!prefs.alertsReady) {
+            GuardState.update { it.copy(lastError = getString(R.string.err_no_alerts)) }
             return
         }
         val time = DateFormat.getTimeFormat(this).format(Date())
         val caption = if (test) getString(R.string.tg_test, prefs.room, time) else getString(R.string.tg_motion, prefs.room, time)
         try {
-            TelegramClient(prefs.botToken).sendPhoto(prefs.chatId, jpeg, caption)
+            if (prefs.alertMethod == Prefs.METHOD_NTFY) {
+                NtfyClient(prefs.ntfyServer, prefs.ntfyTopic).sendPhoto(jpeg, getString(R.string.app_name) + " · " + prefs.room, caption)
+            } else {
+                TelegramClient(prefs.botToken).sendPhoto(prefs.chatId, jpeg, caption)
+            }
             GuardState.update { it.copy(alertsSent = it.alertsSent + 1, lastError = null) }
         } catch (e: Exception) {
             GuardState.update { it.copy(lastError = getString(R.string.err_send, e.message ?: "?")) }
@@ -271,9 +275,13 @@ class GuardService : LifecycleService() {
     }
 
     private fun announce(text: String) {
-        if (!prefs.notifyArm || !prefs.telegramReady) return
+        if (!prefs.notifyArm || !prefs.alertsReady) return
+        val method = prefs.alertMethod
         scope.launch {
-            try { TelegramClient(prefs.botToken).sendMessage(prefs.chatId, text) } catch (_: Exception) {}
+            try {
+                if (method == Prefs.METHOD_NTFY) NtfyClient(prefs.ntfyServer, prefs.ntfyTopic).sendText(getString(R.string.app_name), text)
+                else TelegramClient(prefs.botToken).sendMessage(prefs.chatId, text)
+            } catch (_: Exception) {}
         }
     }
 

@@ -1,10 +1,11 @@
 # Spare Eye
 
-Turn the old Android phone in your drawer into a home camera that messages you on Telegram
-when something moves. No account, no subscription, no cloud. The only thing that leaves the
-phone is the alert photo, sent to your own Telegram chat.
+Turn the old Android phone in your drawer into a home camera that sends a photo to your own
+phone when something moves. No account, no subscription, no cloud of ours. The only thing that
+leaves the phone is the alert photo, sent through ntfy or to your own Telegram bot.
 
-- **Motion alerts with a photo**, straight to Telegram, within a second or two.
+- **Motion alerts with a photo** on your phone within a second or two, through
+  [ntfy](https://ntfy.sh) (free, no account) or Telegram.
 - **Live view on your Wi-Fi**: open a link on any phone or laptop at home and see the picture.
 - **Always visible**: a notification stays in the shade with a Disarm button the whole time,
   and the phone's own camera indicator lights up. It is a camera for your home, not a hidden one.
@@ -13,12 +14,15 @@ phone is the alert photo, sent to your own Telegram chat.
 ## Set it up (five minutes)
 
 1. Install the APK from the Releases page on the spare phone.
-2. In Telegram, open **@BotFather**, send `/newbot`, answer its two questions, and copy the
-   token it gives you. Paste the token into Spare Eye.
-3. Open your new bot in Telegram and send it any message. In Spare Eye tap **Find my chat**.
-   It replies "connected" in Telegram so you know the loop works.
-4. Choose back or front camera, name the room, leave sensitivity at 6.
-5. Stand the phone where it can see the room, plug it in, tap **Arm in 20 seconds**, walk away.
+2. **Alerts with ntfy (default, no account):** Spare Eye shows a random topic name like
+   `spareeye-k3m9...`. On *your own* phone, install the free **ntfy** app (Play Store or
+   F-Droid), tap **+**, and subscribe to that topic on `ntfy.sh`. **Share topic** sends it
+   across; **Send test** checks the loop.
+   **Or Telegram:** open **@BotFather**, send `/newbot`, paste the token into Spare Eye, message
+   your bot once and tap **Find my chat**. (Telegram refuses new bots on some accounts; ntfy
+   doesn't care.)
+3. Choose back or front camera, name the room, leave sensitivity at 6.
+4. Stand the phone where it can see the room, plug it in, tap **Arm in 20 seconds**, walk away.
 
 The screen goes almost black (so the phone doesn't light the room) and shows the live-view
 link. Tap **Disarm** on the screen or in the notification to stop.
@@ -50,9 +54,12 @@ Newer phones don't have this overhead.
 
 ## Privacy
 
-- The bot token and chat id stay in the app's private storage on the phone.
-- Photos are sent to Telegram only on movement (or when you tap "Send a test photo"), and only
-  to the chat you connected. Telegram's own privacy terms apply to what you send there.
+- Settings, the ntfy topic and any bot token stay in the app's private storage on the phone.
+- Photos are sent only on movement (or when you tap "Send a test photo"), and only to your
+  ntfy topic or the Telegram chat you connected.
+- On public ntfy.sh, **anyone who knows the topic name can read it**, so the topic is 18 random
+  characters; don't post it. ntfy.sh keeps attachments for a few hours. For full control, run
+  your own ntfy server and put its address in the app.
 - No analytics, no crash reporting, no accounts.
 
 ## Build it yourself

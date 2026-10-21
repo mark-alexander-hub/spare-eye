@@ -1,7 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Spare Eye</string>
-    <string name="tagline">Turn a spare phone into a home camera that messages you on Telegram when something moves. Nothing leaves the phone except the alert photo, sent to your own chat.</string>
+    <string name="tagline">Turn a spare phone into a home camera that sends a photo to your own phone when something moves. No account, no cloud.</string>
+
+    <string name="method_ntfy">ntfy (no account)</string>
+    <string name="method_telegram">Telegram</string>
+    <string name="ntfy_help">On your own phone, install the free ntfy app, tap +, and subscribe to this topic. Keep it private: anyone with the topic name can see the alerts.</string>
+    <string name="ntfy_share">Share topic</string>
+    <string name="ntfy_test">Send test</string>
+    <string name="ntfy_sending">Sending…</string>
+    <string name="ntfy_sent">Sent. Your phone should show \"Spare Eye is connected\" now.</string>
+    <string name="ntfy_error">Couldn\'t reach ntfy: %1$s</string>
+    <string name="ntfy_server_hint">ntfy server</string>
+    <string name="ntfy_server_help">Leave as https://ntfy.sh unless you run your own.</string>
+    <string name="ntfy_share_text">Spare Eye alerts: in the ntfy app tap +, subscribe to topic %1$s on %2$s\n\n%2$s/%1$s</string>
+    <string name="ntfy_hello">Spare Eye is connected. Alerts from %1$s will arrive here.</string>
 
     <string name="step_alerts">1 · Where the alerts go</string>
     <string name="token_hint">Telegram bot token</string>
@@ -30,7 +43,7 @@
     <string name="arm">Arm in 20 seconds</string>
     <string name="arming_in">Arming in %1$d… tap to cancel</string>
     <string name="arm_help">Stand the phone where it can see the room, plug it in, tap Arm and walk away. The screen goes dark; the camera keeps watching.</string>
-    <string name="arm_needs_telegram">Telegram isn\'t set up, so photos won\'t be sent yet. The live view still works.</string>
+    <string name="arm_needs_alerts">Alerts aren\'t set up yet, so photos won\'t be sent. The live view still works.</string>
     <string name="need_camera">Spare Eye needs the camera to do anything. Allow it in Settings.</string>
 
     <string name="watching">Watching %1$s</string>
@@ -56,7 +69,7 @@
     <string name="err_camera">Camera problem: %1$s</string>
     <string name="err_photo">Couldn\'t take the photo: %1$s</string>
     <string name="err_send">Couldn\'t send to Telegram: %1$s</string>
-    <string name="err_no_telegram">Movement seen, but Telegram isn\'t set up so no photo was sent.</string>
+    <string name="err_no_alerts">Movement seen, but alerts aren\'t set up so no photo was sent.</string>
     <string name="err_live">Live view couldn\'t start: %1$s</string>
     <string name="note_no_wifi">Live view needs Wi-Fi; the phone isn\'t on one.</string>
 </resources>

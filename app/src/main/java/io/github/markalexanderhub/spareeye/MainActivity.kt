@@ -43,6 +43,8 @@ class MainActivity : AppCompatActivity() {
         wireSettings()
 
         b.findChat.setOnClickListener { findChat() }
+        b.ntfyShare.setOnClickListener { shareTopic() }
+        b.ntfyTest.setOnClickListener { ntfyTest() }
         b.arm.setOnClickListener { if (countdown == null) startCountdown() else cancelCountdown() }
         b.disarm.setOnClickListener { GuardService.stop(this) }
         b.testShot.setOnClickListener {
@@ -79,6 +81,40 @@ class MainActivity : AppCompatActivity() {
         b.liveView.isChecked = prefs.liveView
         b.cameraToggle.check(if (prefs.useFrontCamera) R.id.cameraFront else R.id.cameraBack)
         b.chatStatus.text = if (prefs.chatId != 0L) getString(R.string.chat_found, prefs.chatName) else getString(R.string.chat_hint)
+        b.ntfyTopic.text = prefs.ntfyTopic
+        b.ntfyServer.setText(prefs.ntfyServer)
+        val ntfy = prefs.alertMethod == Prefs.METHOD_NTFY
+        b.methodToggle.check(if (ntfy) R.id.methodNtfy else R.id.methodTelegram)
+        showMethod(ntfy)
+    }
+
+    private fun showMethod(ntfy: Boolean) {
+        b.ntfyPanel.visibility = if (ntfy) android.view.View.VISIBLE else android.view.View.GONE
+        b.telegramPanel.visibility = if (ntfy) android.view.View.GONE else android.view.View.VISIBLE
+    }
+
+    private fun shareTopic() {
+        saveTextFields()
+        val text = getString(R.string.ntfy_share_text, prefs.ntfyTopic, prefs.ntfyServer.trimEnd('/'))
+        val send = android.content.Intent(android.content.Intent.ACTION_SEND).apply {
+            type = "text/plain"
+            putExtra(android.content.Intent.EXTRA_TEXT, text)
+        }
+        startActivity(android.content.Intent.createChooser(send, getString(R.string.ntfy_share)))
+    }
+
+    private fun ntfyTest() {
+        saveTextFields()
+        b.ntfyTest.isEnabled = false
+        b.ntfyStatus.text = getString(R.string.ntfy_sending)
+        val server = prefs.ntfyServer
+        val topic = prefs.ntfyTopic
+        val hello = getString(R.string.ntfy_hello, prefs.room)
+        lifecycleScope.launch {
+            val r = withContext(Dispatchers.IO) { runCatching { NtfyClient(server, topic).sendText(getString(R.string.app_name), hello) } }
+            b.ntfyTest.isEnabled = true
+            b.ntfyStatus.text = r.fold({ getString(R.string.ntfy_sent) }, { getString(R.string.ntfy_error, it.message ?: "?") })
+        }
     }
 
     private fun wireSettings() {
@@ -89,6 +125,13 @@ class MainActivity : AppCompatActivity() {
             prefs.cooldownSec = v.toInt()
             b.cooldownValue.text = getString(R.string.cooldown_value, v.toInt())
         }
+        b.methodToggle.addOnButtonCheckedListener { _, id, checked ->
+            if (!checked) return@addOnButtonCheckedListener
+            val ntfy = id == R.id.methodNtfy
+            prefs.alertMethod = if (ntfy) Prefs.METHOD_NTFY else Prefs.METHOD_TELEGRAM
+            showMethod(ntfy)
+        }
+        b.ntfyServer.setOnFocusChangeListener { _, has -> if (!has) prefs.ntfyServer = b.ntfyServer.text.toString() }
         b.notifyArm.setOnCheckedChangeListener { _, on -> prefs.notifyArm = on }
         b.liveView.setOnCheckedChangeListener { _, on -> prefs.liveView = on }
         b.cameraToggle.addOnButtonCheckedListener { _, id, checked ->
@@ -101,6 +144,7 @@ class MainActivity : AppCompatActivity() {
     private fun saveTextFields() {
         prefs.botToken = b.token.text.toString()
         prefs.room = b.room.text.toString()
+        prefs.ntfyServer = b.ntfyServer.text.toString()
     }
 
     private fun findChat() {
@@ -169,8 +213,8 @@ class MainActivity : AppCompatActivity() {
 
     private fun startCountdown() {
         saveTextFields()
-        if (!prefs.telegramReady) {
-            Toast.makeText(this, R.string.arm_needs_telegram, Toast.LENGTH_LONG).show()
+        if (!prefs.alertsReady) {
+            Toast.makeText(this, R.string.arm_needs_alerts, Toast.LENGTH_LONG).show()
         }
         countdown = object : CountDownTimer(20_000, 1000) {
             override fun onTick(ms: Long) { b.arm.text = getString(R.string.arming_in, (ms / 1000) + 1) }

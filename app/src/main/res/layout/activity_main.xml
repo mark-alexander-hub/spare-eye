@@ -75,6 +75,114 @@
                         android:textSize="20sp"
                         android:textStyle="bold" />
 
+                    <com.google.android.material.button.MaterialButtonToggleGroup
+                        android:id="@+id/methodToggle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        app:selectionRequired="true"
+                        app:singleSelection="true">
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/methodNtfy"
+                            style="@style/Widget.Material3.Button.OutlinedButton"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/method_ntfy" />
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/methodTelegram"
+                            style="@style/Widget.Material3.Button.OutlinedButton"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/method_telegram" />
+                    </com.google.android.material.button.MaterialButtonToggleGroup>
+
+                    <!-- ntfy -->
+                    <LinearLayout
+                        android:id="@+id/ntfyPanel"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="12dp"
+                            android:text="@string/ntfy_help"
+                            android:textColor="@color/dim"
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:id="@+id/ntfyTopic"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:background="@color/paper"
+                            android:fontFamily="monospace"
+                            android:padding="12dp"
+                            android:textColor="@color/ink"
+                            android:textIsSelectable="true"
+                            android:textSize="16sp" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:orientation="horizontal">
+
+                            <com.google.android.material.button.MaterialButton
+                                android:id="@+id/ntfyShare"
+                                style="@style/Widget.Material3.Button.TonalButton"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="8dp"
+                                android:layout_weight="1"
+                                android:text="@string/ntfy_share" />
+
+                            <com.google.android.material.button.MaterialButton
+                                android:id="@+id/ntfyTest"
+                                style="@style/Widget.Material3.Button.TonalButton"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="@string/ntfy_test" />
+                        </LinearLayout>
+
+                        <TextView
+                            android:id="@+id/ntfyStatus"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:textColor="@color/dim"
+                            android:textSize="14sp" />
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:hint="@string/ntfy_server_hint"
+                            app:helperText="@string/ntfy_server_help">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/ntfyServer"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:inputType="textUri"
+                                android:maxLines="1" />
+                        </com.google.android.material.textfield.TextInputLayout>
+                    </LinearLayout>
+
+                    <!-- Telegram -->
+                    <LinearLayout
+                        android:id="@+id/telegramPanel"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:visibility="gone">
+
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -107,6 +215,7 @@
                         android:text="@string/chat_hint"
                         android:textColor="@color/dim"
                         android:textSize="14sp" />
+                    </LinearLayout>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
