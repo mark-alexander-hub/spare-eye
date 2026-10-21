@@ -12,6 +12,11 @@ leaves the phone is the alert photo, sent through ntfy or to your own Telegram b
 - Works on Android 8 and newer, so most phones from 2017 onwards.
 
 <p align="center">
+  <a href="https://apps.obtainium.imranr.dev/redirect?r=obtainium://add/https://github.com/mark-alexander-hub/spare-eye"><img src="https://raw.githubusercontent.com/ImranR98/Obtainium/main/assets/graphics/badge_obtainium.png" height="60" alt="Get it on Obtainium"></a>
+  <a href="https://github.com/mark-alexander-hub/spare-eye/releases/latest"><img src="https://img.shields.io/github/v/release/mark-alexander-hub/spare-eye?label=APK&style=for-the-badge" height="40" alt="Download the latest APK"></a>
+</p>
+
+<p align="center">
   <img src="docs/setup.png" width="200" alt="Setup: where the alerts go">
   <img src="docs/camera.png" width="200" alt="Camera, sensitivity and live view settings">
   <img src="docs/armed.png" width="200" alt="Armed screen, dimmed, with Disarm">
@@ -20,7 +25,7 @@ leaves the phone is the alert photo, sent through ntfy or to your own Telegram b
 
 ## Set it up (five minutes)
 
-1. Install the APK from the Releases page on the spare phone.
+1. On the spare phone, install Spare Eye with **[Obtainium](https://github.com/ImranR98/Obtainium)** (tap the badge above; it keeps the app updated from this page) or download the APK from [Releases](https://github.com/mark-alexander-hub/spare-eye/releases/latest).
 2. **Alerts with ntfy (default, no account):** Spare Eye shows a random topic name like
    `spareeye-k3m9...`. On *your own* phone, install the free **ntfy** app (Play Store or
    F-Droid), tap **+**, and subscribe to that topic on `ntfy.sh`. **Share topic** sends it
