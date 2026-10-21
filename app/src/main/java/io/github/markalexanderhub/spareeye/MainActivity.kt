@@ -45,6 +45,11 @@ class MainActivity : AppCompatActivity() {
         b.findChat.setOnClickListener { findChat() }
         b.ntfyShare.setOnClickListener { shareTopic() }
         b.ntfyTest.setOnClickListener { ntfyTest() }
+        b.howTo.setOnClickListener {
+            com.google.android.material.dialog.MaterialAlertDialogBuilder(this)
+                .setTitle(R.string.how_to).setMessage(R.string.how_to_text)
+                .setPositiveButton(android.R.string.ok, null).show()
+        }
         b.arm.setOnClickListener { if (countdown == null) startCountdown() else cancelCountdown() }
         b.disarm.setOnClickListener { GuardService.stop(this) }
         b.testShot.setOnClickListener {

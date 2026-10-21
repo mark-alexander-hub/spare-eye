@@ -39,6 +39,15 @@ leaves the phone is the alert photo, sent through ntfy or to your own Telegram b
 The screen goes almost black (so the phone doesn't light the room) and shows the live-view
 link. Tap **Disarm** on the screen or in the notification to stop.
 
+## Every day
+
+1. Stand the phone where it can see the room and plug it in.
+2. Tap **Arm in 20 seconds** and walk away. The screen goes dark and shows the live-view link.
+3. Movement sends a photo to your phone within a second or two; then it waits 45 seconds before the next.
+4. **Disarm** on the screen or in the notification stops it.
+
+The same guide is inside the app: **How to use** under the title.
+
 ## How the motion detection works
 
 Every frame from the camera is shrunk to a few thousand sample points and compared with the

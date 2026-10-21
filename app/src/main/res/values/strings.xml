@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Spare Eye</string>
+    <string name="how_to">How to use</string>
+    <string name="how_to_text">SET UP, ONCE\n1. On your own phone install the free ntfy app and tap +. Subscribe to the topic shown here on ntfy.sh (Share topic sends it across). Send test checks the loop.\n2. Or use Telegram: make a bot with @BotFather, paste the token here, message the bot once, tap Find my chat.\n3. Choose back or front camera, name the room, leave sensitivity at 6.\n\nEVERY DAY\n1. Stand the phone where it can see the room and plug it in.\n2. Tap Arm in 20 seconds and walk away. The screen goes dark and shows the live view link.\n3. When something moves you get a photo on your phone within a second or two. After an alert it waits 45 seconds before the next one.\n4. To stop: tap Disarm on the screen or in the notification.\n\nLIVE VIEW\nOpen the link on any phone or laptop on the same Wi-Fi to see the picture. It does not work from outside your home.\n\nTIPS\nPoint the camera away from fans, windows with trees, and a TV that is on, or lower the sensitivity. Old phones run a little warm while armed; that is normal.</string>
     <string name="tagline">Turn a spare phone into a home camera that sends a photo to your own phone when something moves. No account, no cloud.</string>
 
     <string name="method_ntfy">ntfy (no account)</string>
