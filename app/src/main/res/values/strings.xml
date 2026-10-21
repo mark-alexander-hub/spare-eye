@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Spare Eye</string>
+    <string name="tagline">Turn a spare phone into a home camera that messages you on Telegram when something moves. Nothing leaves the phone except the alert photo, sent to your own chat.</string>
+
+    <string name="step_alerts">1 · Where the alerts go</string>
+    <string name="token_hint">Telegram bot token</string>
+    <string name="token_help">In Telegram, open @BotFather, send /newbot, follow the two questions and paste the token it gives you here.</string>
+    <string name="find_chat">Find my chat</string>
+    <string name="chat_hint">Then open your new bot in Telegram, send it any message (hi is fine), and tap Find my chat.</string>
+    <string name="chat_need_token">Paste the bot token first.</string>
+    <string name="chat_looking">Asking Telegram…</string>
+    <string name="chat_none">Token works (%1$s), but nobody has messaged the bot yet. Send it a message in Telegram, then tap again.</string>
+    <string name="chat_found">Alerts will go to: %1$s ✓</string>
+    <string name="chat_error">Telegram didn\'t like that: %1$s</string>
+    <string name="tg_hello">Spare Eye is connected. Alerts from your spare phone will arrive here.</string>
+
+    <string name="step_camera">2 · The camera</string>
+    <string name="camera_back">Back camera</string>
+    <string name="camera_front">Front camera</string>
+    <string name="room_hint">Where is the phone? (e.g. Living room)</string>
+    <string name="sensitivity">Sensitivity</string>
+    <string name="sensitivity_help">Higher catches smaller movements. 6 suits a room; drop to 3 for a window with trees or a ceiling fan.</string>
+    <string name="cooldown">Pause between alerts</string>
+    <string name="cooldown_value">%1$d seconds</string>
+    <string name="notify_arm">Message me when it arms and disarms</string>
+    <string name="live_view">Live view on my Wi-Fi</string>
+    <string name="live_view_help">Open the link on any phone or laptop on the same Wi-Fi to see the picture. It never leaves your home.</string>
+
+    <string name="arm">Arm in 20 seconds</string>
+    <string name="arming_in">Arming in %1$d… tap to cancel</string>
+    <string name="arm_help">Stand the phone where it can see the room, plug it in, tap Arm and walk away. The screen goes dark; the camera keeps watching.</string>
+    <string name="arm_needs_telegram">Telegram isn\'t set up, so photos won\'t be sent yet. The live view still works.</string>
+    <string name="need_camera">Spare Eye needs the camera to do anything. Allow it in Settings.</string>
+
+    <string name="watching">Watching %1$s</string>
+    <string name="armed_status">Armed %1$s · last movement: %2$s · alerts sent: %3$d</string>
+    <string name="none_yet">none yet</string>
+    <string name="live_at">Live view: %1$s</string>
+    <string name="live_off">Live view is off</string>
+    <string name="disarm">Disarm</string>
+    <string name="test_shot">Send a test photo</string>
+    <string name="test_sent">Taking a photo and sending it…</string>
+    <string name="armed_note">Tap Disarm to stop. The notification in the shade has a Disarm button too.</string>
+
+    <string name="channel_name">Watching</string>
+    <string name="channel_desc">Shown the whole time the camera is armed.</string>
+    <string name="notif_starting">Starting the camera…</string>
+    <string name="notif_watching">Watching %1$s. Tap to open.</string>
+
+    <string name="tg_armed">Spare Eye armed in %1$s.</string>
+    <string name="tg_disarmed">Spare Eye disarmed in %1$s.</string>
+    <string name="tg_motion">Movement in %1$s at %2$s</string>
+    <string name="tg_test">Test photo from %1$s at %2$s</string>
+
+    <string name="err_camera">Camera problem: %1$s</string>
+    <string name="err_photo">Couldn\'t take the photo: %1$s</string>
+    <string name="err_send">Couldn\'t send to Telegram: %1$s</string>
+    <string name="err_no_telegram">Movement seen, but Telegram isn\'t set up so no photo was sent.</string>
+    <string name="err_live">Live view couldn\'t start: %1$s</string>
+    <string name="note_no_wifi">Live view needs Wi-Fi; the phone isn\'t on one.</string>
+</resources>
