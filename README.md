@@ -11,6 +11,13 @@ leaves the phone is the alert photo, sent through ntfy or to your own Telegram b
   and the phone's own camera indicator lights up. It is a camera for your home, not a hidden one.
 - Works on Android 8 and newer, so most phones from 2017 onwards.
 
+<p align="center">
+  <img src="docs/setup.png" width="200" alt="Setup: where the alerts go">
+  <img src="docs/camera.png" width="200" alt="Camera, sensitivity and live view settings">
+  <img src="docs/armed.png" width="200" alt="Armed screen, dimmed, with Disarm">
+  <img src="docs/alerts.png" width="200" alt="Alerts arriving in the ntfy app">
+</p>
+
 ## Set it up (five minutes)
 
 1. Install the APK from the Releases page on the spare phone.
